@@ -4,7 +4,10 @@ Skin settings to color view, vote and answer counters
 from askbot.conf.settings_wrapper import settings
 from askbot.deps.livesettings import ConfigurationGroup, IntegerValue, StringValue
 from django.utils.translation import ugettext as _
-from askbot.deps.grapefruit import Color
+try:
+    from grapefruit import Color
+except Exception, e:
+    from askbot.deps.grapefruit import Color
 
 SKIN_COUNTER_SETTINGS = ConfigurationGroup(
                             'SKIN_COUNTER_SETTINGS',

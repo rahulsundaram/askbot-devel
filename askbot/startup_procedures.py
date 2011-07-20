@@ -53,14 +53,30 @@ def test_middleware():
     installed in the django settings.py file. If that is not the
     case - raises an ImproperlyConfigured exception.
     """
-    required_middleware = (
+
+    recaptcha_django_syscopy = 0
+    try:
+        import recaptcha_django
+        recaptcha_django_syscopy = 1
+    except Exception, e:
+        pass
+
+    required_middleware_list = [
         'askbot.middleware.anon_user.ConnectToSessionMessagesMiddleware',
         'askbot.middleware.pagesize.QuestionsPageSizeMiddleware',
         'askbot.middleware.cancel.CancelActionMiddleware',
-        'askbot.deps.recaptcha_django.middleware.ReCaptchaMiddleware',
         'django.middleware.transaction.TransactionMiddleware',
         'askbot.middleware.view_log.ViewLogMiddleware',
-    )
+    ]
+
+    recaptcha_str = 'recaptcha_django.middleware.ReCaptchaMiddleware'
+    if recaptcha_django_syscopy == 0:
+        required_middleware_list.append('askbot.deps.' + recaptcha_str)
+    elif recaptcha_django_syscopy == 1:
+        required_middleware_list.append(recaptcha_str)
+
+    required_middleware = tuple(required_middleware_list)
+
     #'debug_toolbar.middleware.DebugToolbarMiddleware',
     missing_middleware = list()
     for middleware in required_middleware:
@@ -107,3 +123,4 @@ def run():
         transaction.commit()
     except:
         transaction.rollback()
+

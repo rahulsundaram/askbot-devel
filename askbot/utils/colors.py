@@ -1,4 +1,7 @@
-from askbot.deps.grapefruit import Color
+try:
+    from grapefruit import Color
+except Exception, e:
+    from askbot.deps.grapefruit import Color
 import keyedcache
 import math
 
