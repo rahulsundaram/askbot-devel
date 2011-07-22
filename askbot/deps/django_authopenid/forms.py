@@ -37,7 +37,12 @@ from django.conf import settings
 from askbot.conf import settings as askbot_settings
 from askbot import const as askbot_const
 from django.utils.safestring import mark_safe
-from askbot.deps.recaptcha_django import ReCaptchaField
+
+try:
+    from recaptcha_django import ReCaptchaField
+except Exception, e:
+    from askbot.deps.recaptcha_django import ReCaptchaField
+
 from askbot.utils.forms import NextUrlField, UserNameField, UserEmailField, SetPasswordForm
 
 # needed for some linux distributions like debian
@@ -45,8 +50,11 @@ try:
     from askbot.deps.openid.yadis import xri
 except ImportError:
     from yadis import xri
-    
-from askbot.deps.django_authopenid import util
+
+try:    
+    from django_authopenid import util
+except Exception, e:
+    from askbot.deps.django_authopenid import util
 
 __all__ = [
     'OpenidSigninForm','OpenidRegisterForm',
